@@ -1,37 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import "./App.css";
 import BoardsContainer from "./components/Boards/BoardsContainer";
 import Header from "./components/Header";
+import useAuth from "./hooks/useAuth";
+import useLogin from "./hooks/useLogin";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const login = useLogin();
+  const { auth } = useAuth();
 
   useEffect(() => {
-    if (localStorage.getItem("token")) setIsLoggedIn(true);
-    else {
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: "fauzanlinnas@gmail.com",
-          password: "asdfgh",
-        }),
-      };
-      fetch(
-        "https://todo-api-18-140-52-65.rakamin.com/auth/login",
-        requestOptions
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          localStorage.setItem("token", data.auth_token);
-          setIsLoggedIn(true);
-        });
+    if (!auth) {
+      login();
     }
-  }, []);
+  });
 
   return (
     <div>
-      {isLoggedIn ? (
+      {auth ? (
         <>
           <Header />
           <BoardsContainer />
