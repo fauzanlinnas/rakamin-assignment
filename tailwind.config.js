@@ -6,7 +6,11 @@ module.exports = {
       colors: {
         primary: "#01959F",
 
-        "rakamin-grey": "#E0E0E0",
+        "neutral-40": "#E0E0E0",
+        "neutral-90": "#404040",
+        "neutral-100": "#1D1F20",
+
+        "rakamin-grey": "#EDEDED",
       },
     },
   },
