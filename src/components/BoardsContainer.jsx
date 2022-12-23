@@ -1,6 +1,7 @@
 import React from "react";
 import Checkmark from "../assets/icon/Checkmark";
 import Menu from "../assets/icon/Menu";
+import PlusCircle from "../assets/icon/PlusCircle";
 
 const Task = () => {
   return (
@@ -28,7 +29,13 @@ const Board = () => {
         Group Task 1
       </p>
       <p className="mb-2 font-bold">January - March</p>
-      <Task />
+      <div className="space-y-3 mb-2">
+        <Task />
+      </div>
+      <div className="flex items-center">
+        <PlusCircle className="mr-[5px]" />
+        <p>New Task</p>
+      </div>
     </div>
   );
 };
