@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import useBoards from "../../hooks/useBoards";
+import { boardColors } from "../../utils/boardColors";
 import Board from "./Board";
 
 const BoardsContainer = () => {
@@ -23,7 +24,12 @@ const BoardsContainer = () => {
   return (
     <div className="p-6 flex space-x-4 items-start">
       {boards.map((val, i) => (
-        <Board data={val} key={i} id={val.id} />
+        <Board
+          data={val}
+          key={i}
+          id={val.id}
+          styling={boardColors[i % boardColors.length]}
+        />
       ))}
     </div>
   );

@@ -13,7 +13,7 @@ const MenuItem = ({ icon, text, onClick, isDelete }) => {
   return (
     <button
       onClick={onClick}
-      className={`flex space-x-4 items-center hover:text-${
+      className={`flex space-x-4 py-[6px] w-full items-center hover:text-${
         isDelete ? "danger" : "primary"
       }`}
     >
@@ -23,12 +23,18 @@ const MenuItem = ({ icon, text, onClick, isDelete }) => {
   );
 };
 
-const Task = ({ taskData, onClickDeleteTask }) => {
+const Task = ({
+  taskData,
+  onClickDeleteTask,
+  onClickMoveLeft,
+  onClickMoveRight,
+  onClickEdit,
+}) => {
   const isComplete = taskData.progress_percentage === 100;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="p-4 rounded bg-[#FAFAFA] border border-neutral-40">
+    <div className="p-4 rounded bg-neutral-20 border border-neutral-40">
       <p className="pb-2 mb-2 border-b border-dashed border-neutral-40">
         {taskData.name}
       </p>
@@ -37,8 +43,8 @@ const Task = ({ taskData, onClickDeleteTask }) => {
           <div className="relative bg-neutral-30 h-4 w-full rounded-full overflow-hidden mr-3">
             <div
               style={{ width: `${taskData.progress_percentage}%` }}
-              className={`absolute left-0 top-0 h-full bg-${
-                isComplete ? "success" : "primary"
+              className={`absolute left-0 top-0 h-full ${
+                isComplete ? "bg-success" : "bg-primary"
               }`}
             ></div>
           </div>
@@ -56,10 +62,31 @@ const Task = ({ taskData, onClickDeleteTask }) => {
           </button>
           {isMenuOpen && (
             <OutsideClose setIsOpen={setIsMenuOpen}>
-              <div className="w-[320px] px-4 py-[14px] rounded-lg mt-3 absolute top-5 left-[26px] bg-white shadow-rakamin space-y-3">
-                <MenuItem icon={<ArrowRight />} text="Move Right" />
-                <MenuItem icon={<ArrowLeft />} text="Move Left" />
-                <MenuItem icon={<EditIcon />} text="Edit" />
+              <div className="w-[320px] px-4 py-2 rounded-lg mt-3 absolute top-5 left-[26px] bg-white shadow-rakamin">
+                <MenuItem
+                  icon={<ArrowRight />}
+                  text="Move Right"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onClickMoveRight();
+                  }}
+                />
+                <MenuItem
+                  icon={<ArrowLeft />}
+                  text="Move Left"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onClickMoveLeft();
+                  }}
+                />
+                <MenuItem
+                  icon={<EditIcon />}
+                  text="Edit"
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onClickEdit();
+                  }}
+                />
                 <MenuItem
                   icon={<DeleteIcon />}
                   text="Delete"

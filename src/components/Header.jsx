@@ -91,7 +91,10 @@ const Header = () => {
           <div className="flex items-center justify-end space-x-[10px] mt-6">
             <button
               className="rounded-lg px-4 py-1 text-neutral-100 text-sm font-bold"
-              onClick={() => setIsCreateGroupModalOpen(false)}
+              onClick={() => {
+                setIsCreateGroupModalOpen(false);
+                setFormData(initialForm);
+              }}
             >
               Cancel
             </button>

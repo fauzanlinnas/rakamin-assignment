@@ -5,17 +5,17 @@ import Modal from "../Modal";
 import Task from "./Task";
 
 const initialForm = {
-  title: "",
-  description: "",
+  name: "",
+  percentage: "",
 };
 
-const Board = ({ data, id }) => {
+const Board = ({ data, id, styling }) => {
   const { auth } = useAuth();
 
   const [tasksList, setTasksList] = useState([]);
-  console.log("tasksList", tasksList);
   const [formData, setFormData] = useState(initialForm);
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
+  const [editedId, setEditedId] = useState(-1);
 
   const fetchTasks = () => {
     const requestOptions = {
@@ -48,6 +48,11 @@ const Board = ({ data, id }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    let adjustedPercentage = 0;
+    if (formData.percentage > 100) adjustedPercentage = 100;
+    else if (formData.percentage < 0) adjustedPercentage = 0;
+    else adjustedPercentage = formData.percentage;
+
     const requestOptions = {
       method: "POST",
       headers: {
@@ -56,7 +61,7 @@ const Board = ({ data, id }) => {
       },
       body: JSON.stringify({
         name: formData.name,
-        progress_percentage: formData.percentage,
+        progress_percentage: adjustedPercentage,
       }),
     };
 
@@ -70,6 +75,53 @@ const Board = ({ data, id }) => {
         setIsNewTaskModalOpen(false);
         setFormData(initialForm);
       });
+  };
+
+  const handleEdit = (e) => {
+    e.preventDefault();
+
+    const requestOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth}`,
+      },
+      body: JSON.stringify({
+        name: formData.name,
+        progress_percentage: formData.percentage,
+      }),
+    };
+
+    fetch(
+      `https://todo-api-18-140-52-65.rakamin.com/todos/${id}/items/${editedId}`,
+      requestOptions
+    )
+      .then((response) => fetchTasks())
+      .finally(() => {
+        setIsNewTaskModalOpen(false);
+        setFormData(initialForm);
+      });
+  };
+
+  const handleMoveTask = (taskId, target, taskName) => {
+    const requestOptions = {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth}`,
+      },
+      body: JSON.stringify({
+        target_todo_id: target,
+        name: taskName,
+      }),
+    };
+
+    fetch(
+      `https://todo-api-18-140-52-65.rakamin.com/todos/${id}/items/${taskId}`,
+      requestOptions
+    )
+      .then((response) => fetchTasks())
+      .catch((err) => console.error(err));
   };
 
   const handleDeleteTask = (taskId) => {
@@ -90,8 +142,12 @@ const Board = ({ data, id }) => {
   };
 
   return (
-    <div className="p-4 rounded bg-[#F7FEFF] border border-primary flex-[0_1_25%] min-w-[326px]">
-      <p className="px-2 py-[2px] rounded border border-primary w-fit text-primary text-xs mb-2">
+    <div
+      className={`p-4 rounded border flex-[0_1_25%] min-w-[326px] ${styling.bgColor} ${styling.boardBorderColor}`}
+    >
+      <p
+        className={`px-2 py-[2px] rounded border w-fit text-xs mb-2 ${styling.titleFontColor} ${styling.titleBorderColor}`}
+      >
         {data.title}
       </p>
       <p className="mb-2 font-bold">{data.description}</p>
@@ -102,6 +158,20 @@ const Board = ({ data, id }) => {
               key={i}
               taskData={val}
               onClickDeleteTask={() => handleDeleteTask(val.id)}
+              onClickMoveLeft={() =>
+                handleMoveTask(val.id, val.id - 1, val.name)
+              }
+              onClickMoveRight={() =>
+                handleMoveTask(val.id, val.id + 1, val.name)
+              }
+              onClickEdit={() => {
+                setEditedId(val.id);
+                setFormData({
+                  name: val.name,
+                  percentage: val.progress_percentage,
+                });
+                setIsNewTaskModalOpen(true);
+              }}
             />
           ))
         ) : (
@@ -154,13 +224,17 @@ const Board = ({ data, id }) => {
           <div className="flex items-center justify-end space-x-[10px] mt-6">
             <button
               className="rounded-lg px-4 py-1 text-neutral-100 text-sm font-bold"
-              onClick={() => setIsNewTaskModalOpen(false)}
+              onClick={() => {
+                setIsNewTaskModalOpen(false);
+                setFormData(initialForm);
+              }}
             >
               Cancel
             </button>
             <button
-              className="rounded-lg px-4 py-1 bg-primary text-white text-sm font-bold"
-              onClick={handleSubmit}
+              className="rounded-lg px-4 py-1 bg-primary text-white text-sm font-bold disabled:bg-neutral-70"
+              onClick={editedId > 0 ? handleEdit : handleSubmit}
+              disabled={!formData.name || !formData.percentage}
             >
               Save Task
             </button>

@@ -12,8 +12,21 @@ module.exports = {
     extend: {
       colors: {
         primary: "#01959F",
+        "primary-border": "#4DB5BC",
+
+        "secondary-pressed": "#FA9810",
+        "secondary-border": "#FEEABC",
+        "secondary-surface": "#FFFCF5",
+
         success: "#43936C",
+        "success-border": "#B8DBCA",
+        "success-surface": "#F8FBF9",
+
         danger: "#E11428",
+        "danger-border": "#F5B1B7",
+        "danger-surface": "#FFFAFA",
+
+        surface: "#F7FEFF",
 
         "neutral-20": "#FAFAFA",
         "neutral-30": "#EDEDED",
