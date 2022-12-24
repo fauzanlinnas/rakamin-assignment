@@ -11,12 +11,13 @@ const initialForm = {
 
 const Board = ({ data, id }) => {
   const { auth } = useAuth();
+
   const [tasksList, setTasksList] = useState([]);
   console.log("tasksList", tasksList);
   const [formData, setFormData] = useState(initialForm);
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
 
-  useEffect(() => {
+  const fetchTasks = () => {
     const requestOptions = {
       method: "GET",
       headers: {
@@ -31,6 +32,10 @@ const Board = ({ data, id }) => {
     )
       .then((response) => response.json())
       .then((data) => setTasksList(data));
+  };
+
+  useEffect(() => {
+    fetchTasks();
   }, []);
 
   const handleChange = (e) => {
@@ -67,6 +72,23 @@ const Board = ({ data, id }) => {
       });
   };
 
+  const handleDeleteTask = (taskId) => {
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth}`,
+      },
+    };
+
+    fetch(
+      `https://todo-api-18-140-52-65.rakamin.com/todos/${id}/items/${taskId}`,
+      requestOptions
+    )
+      .then((response) => fetchTasks())
+      .catch((err) => console.error(err));
+  };
+
   return (
     <div className="p-4 rounded bg-[#F7FEFF] border border-primary flex-[0_1_25%] min-w-[326px]">
       <p className="px-2 py-[2px] rounded border border-primary w-fit text-primary text-xs mb-2">
@@ -75,7 +97,13 @@ const Board = ({ data, id }) => {
       <p className="mb-2 font-bold">{data.description}</p>
       <div className="space-y-3 mb-2">
         {tasksList.length > 0 ? (
-          tasksList.map((val, i) => <Task key={i} taskData={val} />)
+          tasksList.map((val, i) => (
+            <Task
+              key={i}
+              taskData={val}
+              onClickDeleteTask={() => handleDeleteTask(val.id)}
+            />
+          ))
         ) : (
           <div className="rounded py-2 px-4 bg-neutral-20 border border-neutral-40">
             <p className="text-sm text-neutral-70">No Task</p>

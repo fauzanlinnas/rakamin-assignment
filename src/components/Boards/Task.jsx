@@ -9,11 +9,13 @@ import {
 } from "../../assets/icon";
 import OutsideClose from "../OutsideClose";
 
-const MenuItem = ({ icon, text, onClick }) => {
+const MenuItem = ({ icon, text, onClick, isDelete }) => {
   return (
     <button
       onClick={onClick}
-      className="flex space-x-4 items-center hover:text-primary"
+      className={`flex space-x-4 items-center hover:text-${
+        isDelete ? "danger" : "primary"
+      }`}
     >
       {icon}
       <p className="text-sm font-semibold">{text}</p>
@@ -21,7 +23,7 @@ const MenuItem = ({ icon, text, onClick }) => {
   );
 };
 
-const Task = ({ taskData }) => {
+const Task = ({ taskData, onClickDeleteTask }) => {
   const isComplete = taskData.progress_percentage === 100;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -58,7 +60,15 @@ const Task = ({ taskData }) => {
                 <MenuItem icon={<ArrowRight />} text="Move Right" />
                 <MenuItem icon={<ArrowLeft />} text="Move Left" />
                 <MenuItem icon={<EditIcon />} text="Edit" />
-                <MenuItem icon={<DeleteIcon />} text="Delete" />
+                <MenuItem
+                  icon={<DeleteIcon />}
+                  text="Delete"
+                  isDelete={true}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    onClickDeleteTask();
+                  }}
+                />
               </div>
             </OutsideClose>
           )}

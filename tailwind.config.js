@@ -13,6 +13,7 @@ module.exports = {
       colors: {
         primary: "#01959F",
         success: "#43936C",
+        danger: "#E11428",
 
         "neutral-20": "#FAFAFA",
         "neutral-30": "#EDEDED",
