@@ -21,4 +21,4 @@ const Menu = ({ className }) => {
   );
 };
 
-export default Menu;
+export { Menu };

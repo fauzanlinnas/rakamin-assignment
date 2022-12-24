@@ -21,4 +21,4 @@ const Plus = ({ className }) => {
   );
 };
 
-export default Plus;
+export { Plus };

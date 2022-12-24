@@ -33,4 +33,4 @@ const Checkmark = ({ className }) => {
   );
 };
 
-export default Checkmark;
+export { Checkmark };
