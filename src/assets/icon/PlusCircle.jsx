@@ -19,4 +19,4 @@ const PlusCircle = ({ className }) => {
   );
 };
 
-export default PlusCircle;
+export { PlusCircle };

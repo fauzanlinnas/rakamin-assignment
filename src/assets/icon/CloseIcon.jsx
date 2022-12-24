@@ -21,4 +21,4 @@ const CloseIcon = ({ className }) => {
   );
 };
 
-export default CloseIcon;
+export { CloseIcon };

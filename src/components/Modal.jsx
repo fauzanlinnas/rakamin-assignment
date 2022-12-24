@@ -1,6 +1,6 @@
 import React from "react";
 import { createPortal } from "react-dom";
-import CloseIcon from "../assets/icon/CloseIcon";
+import { CloseIcon } from "../assets/icon";
 
 const MODAL_STYLES = {
   position: "fixed",
