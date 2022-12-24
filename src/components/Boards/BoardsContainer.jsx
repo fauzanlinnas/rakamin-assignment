@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
+import useBoards from "../../hooks/useBoards";
 import Board from "./Board";
 
 const BoardsContainer = () => {
   const { auth } = useAuth();
-
-  const [boardList, setBoardList] = useState([]);
-  console.log("boardList", boardList);
+  const { boards, setBoards } = useBoards();
 
   useEffect(() => {
     const requestOptions = {
@@ -18,12 +17,12 @@ const BoardsContainer = () => {
     };
     fetch("https://todo-api-18-140-52-65.rakamin.com/todos", requestOptions)
       .then((response) => response.json())
-      .then((data) => setBoardList(data));
+      .then((data) => setBoards(data));
   }, []);
 
   return (
     <div className="p-6 flex space-x-4 items-start">
-      {boardList.map((val, i) => (
+      {boards.map((val, i) => (
         <Board data={val} key={i} id={val.id} />
       ))}
     </div>

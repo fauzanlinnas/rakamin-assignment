@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import Plus from "../assets/icon/Plus";
+import { Plus } from "../assets/icon";
+import useBoards from "../hooks/useBoards";
 import Modal from "./Modal";
 
+const initialForm = {
+  title: "",
+  description: "",
+};
+
 const Header = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-  });
+  const { setBoards } = useBoards();
+  const [formData, setFormData] = useState(initialForm);
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
 
   const handleChange = (e) => {
@@ -30,10 +34,14 @@ const Header = () => {
         description: formData.description,
       }),
     };
-    fetch(
-      "https://todo-api-18-140-52-65.rakamin.com/todos",
-      requestOptions
-    ).then((response) => console.log(response));
+
+    fetch("https://todo-api-18-140-52-65.rakamin.com/todos", requestOptions)
+      .then((response) => response.json())
+      .then((data) => setBoards((prevBoards) => [...prevBoards, data]))
+      .finally(() => {
+        setIsCreateGroupModalOpen(false);
+        setFormData(initialForm);
+      });
   };
 
   return (
@@ -59,7 +67,7 @@ const Header = () => {
             Group Title
           </label>
           <input
-            className="mb-4 border border-rakamin-grey rounded-lg px-4 py-2"
+            className="mb-4 border border-neutral-30 rounded-lg px-4 py-2"
             id="title"
             type="text"
             value={formData.title}
@@ -73,7 +81,7 @@ const Header = () => {
             Description
           </label>
           <input
-            className="border border-rakamin-grey rounded-lg px-4 py-2"
+            className="border border-neutral-30 rounded-lg px-4 py-2"
             id="description"
             type="text"
             value={formData.description}
