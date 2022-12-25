@@ -13,7 +13,7 @@ const OutsideClose = ({ children, setIsOpen }) => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [wrapperRef]);
+  }, [wrapperRef, setIsOpen]);
 
   return (
     <div ref={wrapperRef} className="z-10">
