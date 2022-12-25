@@ -13,8 +13,8 @@ const MenuItem = ({ icon, text, onClick, isDelete }) => {
   return (
     <button
       onClick={onClick}
-      className={`flex space-x-4 py-[6px] w-full items-center hover:text-${
-        isDelete ? "danger" : "primary"
+      className={`flex space-x-4 py-[6px] w-full items-center ${
+        isDelete ? "hover:text-danger" : "hover:text-primary"
       }`}
     >
       {icon}
@@ -63,7 +63,11 @@ const Task = ({
           </button>
           {isMenuOpen && (
             <OutsideClose setIsOpen={setIsMenuOpen}>
-              <div className="w-[320px] px-4 py-2 rounded-lg mt-3 absolute top-5 left-[26px] bg-white shadow-rakamin">
+              <div
+                className={`w-[320px] px-4 py-2 rounded-lg mt-3 absolute top-5 bg-white shadow-rakamin ${
+                  boardPlace === "end" ? "right-0" : "left-[26px]"
+                }`}
+              >
                 {!(boardPlace === "end") && (
                   <MenuItem
                     icon={<ArrowRight />}

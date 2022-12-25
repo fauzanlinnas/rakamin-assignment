@@ -8,7 +8,7 @@ const BoardsContainer = () => {
   const { auth } = useAuth();
   const { boards, setBoards } = useBoards();
 
-  useEffect(() => {
+  const fetchBoards = () => {
     const requestOptions = {
       method: "GET",
       headers: {
@@ -19,18 +19,33 @@ const BoardsContainer = () => {
     fetch("https://todo-api-18-140-52-65.rakamin.com/todos", requestOptions)
       .then((response) => response.json())
       .then((data) => setBoards(data));
+  };
+
+  useEffect(() => {
+    fetchBoards();
   }, []);
 
   return (
     <div className="p-6 flex space-x-4 items-start">
-      {boards.map((val, i) => (
-        <Board
-          key={i}
-          data={val}
-          id={val.id}
-          styling={boardColors[i % boardColors.length]}
-        />
-      ))}
+      {boards.map((val, i) => {
+        let boardPlace = "";
+
+        if (i === 0) boardPlace = "start";
+        else if (i === boards.length - 1) boardPlace = "end";
+        else boardPlace = "between";
+
+        return (
+          <Board
+            key={i}
+            index={i}
+            data={val}
+            id={val.id}
+            styling={boardColors[i % boardColors.length]}
+            boardPlace={boardPlace}
+            fetchBoards={fetchBoards}
+          />
+        );
+      })}
     </div>
   );
 };
