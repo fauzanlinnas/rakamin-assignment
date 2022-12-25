@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { PlusCircle } from "../../assets/icon";
 import useAuth from "../../hooks/useAuth";
 import useBoards from "../../hooks/useBoards";
@@ -19,7 +19,7 @@ const Board = ({ data, id, styling, boardPlace, fetchBoards, index }) => {
   const [isNewTaskModalOpen, setIsNewTaskModalOpen] = useState(false);
   const [editedId, setEditedId] = useState(-1);
 
-  const fetchTasks = () => {
+  const fetchTasks = useCallback(() => {
     const requestOptions = {
       method: "GET",
       headers: {
@@ -34,11 +34,11 @@ const Board = ({ data, id, styling, boardPlace, fetchBoards, index }) => {
     )
       .then((response) => response.json())
       .then((data) => setTasksList(data));
-  };
+  }, [auth, id]);
 
   useEffect(() => {
     fetchTasks();
-  }, [boards]);
+  }, [boards, fetchTasks]);
 
   const handleChange = (e) => {
     setFormData({

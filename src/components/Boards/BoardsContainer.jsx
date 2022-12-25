@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import useAuth from "../../hooks/useAuth";
 import useBoards from "../../hooks/useBoards";
 import { boardColors } from "../../utils/boardColors";
@@ -8,7 +8,7 @@ const BoardsContainer = () => {
   const { auth } = useAuth();
   const { boards, setBoards } = useBoards();
 
-  const fetchBoards = () => {
+  const fetchBoards = useCallback(() => {
     const requestOptions = {
       method: "GET",
       headers: {
@@ -19,11 +19,11 @@ const BoardsContainer = () => {
     fetch("https://todo-api-18-140-52-65.rakamin.com/todos", requestOptions)
       .then((response) => response.json())
       .then((data) => setBoards(data));
-  };
+  }, [auth, setBoards]);
 
   useEffect(() => {
     fetchBoards();
-  }, []);
+  }, [fetchBoards]);
 
   return (
     <div className="p-6 flex space-x-4 items-start">
