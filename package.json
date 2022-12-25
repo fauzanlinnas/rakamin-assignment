@@ -1,6 +1,5 @@
 {
   "name": "rakamin-assignment",
-  "homepage": "https://astounding-churros-4dbf6b.netlify.app/v1",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
