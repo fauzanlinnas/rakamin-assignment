@@ -29,6 +29,7 @@ const Task = ({
   onClickMoveLeft,
   onClickMoveRight,
   onClickEdit,
+  boardPlace,
 }) => {
   const isComplete = taskData.progress_percentage === 100;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,22 +64,28 @@ const Task = ({
           {isMenuOpen && (
             <OutsideClose setIsOpen={setIsMenuOpen}>
               <div className="w-[320px] px-4 py-2 rounded-lg mt-3 absolute top-5 left-[26px] bg-white shadow-rakamin">
-                <MenuItem
-                  icon={<ArrowRight />}
-                  text="Move Right"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    onClickMoveRight();
-                  }}
-                />
-                <MenuItem
-                  icon={<ArrowLeft />}
-                  text="Move Left"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    onClickMoveLeft();
-                  }}
-                />
+                {!(boardPlace === "end") && (
+                  <MenuItem
+                    icon={<ArrowRight />}
+                    text="Move Right"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      onClickMoveRight();
+                    }}
+                  />
+                )}
+
+                {!(boardPlace === "start") && (
+                  <MenuItem
+                    icon={<ArrowLeft />}
+                    text="Move Left"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      onClickMoveLeft();
+                    }}
+                  />
+                )}
+
                 <MenuItem
                   icon={<EditIcon />}
                   text="Edit"

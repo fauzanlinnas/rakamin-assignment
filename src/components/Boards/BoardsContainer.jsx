@@ -25,8 +25,8 @@ const BoardsContainer = () => {
     <div className="p-6 flex space-x-4 items-start">
       {boards.map((val, i) => (
         <Board
-          data={val}
           key={i}
+          data={val}
           id={val.id}
           styling={boardColors[i % boardColors.length]}
         />

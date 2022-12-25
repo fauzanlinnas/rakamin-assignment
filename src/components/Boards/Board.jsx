@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PlusCircle } from "../../assets/icon";
 import useAuth from "../../hooks/useAuth";
+import useBoards from "../../hooks/useBoards";
 import Modal from "../Modal";
 import Task from "./Task";
 
@@ -11,6 +12,7 @@ const initialForm = {
 
 const Board = ({ data, id, styling }) => {
   const { auth } = useAuth();
+  const { boards } = useBoards();
 
   const [tasksList, setTasksList] = useState([]);
   const [formData, setFormData] = useState(initialForm);
@@ -153,27 +155,36 @@ const Board = ({ data, id, styling }) => {
       <p className="mb-2 font-bold">{data.description}</p>
       <div className="space-y-3 mb-2">
         {tasksList.length > 0 ? (
-          tasksList.map((val, i) => (
-            <Task
-              key={i}
-              taskData={val}
-              onClickDeleteTask={() => handleDeleteTask(val.id)}
-              onClickMoveLeft={() =>
-                handleMoveTask(val.id, val.id - 1, val.name)
-              }
-              onClickMoveRight={() =>
-                handleMoveTask(val.id, val.id + 1, val.name)
-              }
-              onClickEdit={() => {
-                setEditedId(val.id);
-                setFormData({
-                  name: val.name,
-                  percentage: val.progress_percentage,
-                });
-                setIsNewTaskModalOpen(true);
-              }}
-            />
-          ))
+          tasksList.map((val, i) => {
+            let boardPlace = "";
+
+            if (i === 0) boardPlace = "start";
+            else if (i === boards.length - 1) boardPlace = "end";
+            else boardPlace = "between";
+
+            return (
+              <Task
+                key={i}
+                taskData={val}
+                onClickDeleteTask={() => handleDeleteTask(val.id)}
+                onClickMoveLeft={() =>
+                  handleMoveTask(val.id, boards[i - 1].id, val.name)
+                }
+                onClickMoveRight={() =>
+                  handleMoveTask(val.id, boards[i + 1].id, val.name)
+                }
+                onClickEdit={() => {
+                  setEditedId(val.id);
+                  setFormData({
+                    name: val.name,
+                    percentage: val.progress_percentage,
+                  });
+                  setIsNewTaskModalOpen(true);
+                }}
+                boardPlace={boardPlace}
+              />
+            );
+          })
         ) : (
           <div className="rounded py-2 px-4 bg-neutral-20 border border-neutral-40">
             <p className="text-sm text-neutral-70">No Task</p>
